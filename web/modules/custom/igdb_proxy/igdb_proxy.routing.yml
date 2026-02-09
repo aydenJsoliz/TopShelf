@@ -1,0 +1,7 @@
+igdb_proxy.games:
+  path: '/igdb/feed/games'
+  defaults:
+    _controller: '\Drupal\igdb_proxy\Controller\IgdbProxyController::games'
+    _title: 'IGDB Games Feed'
+  requirements:
+    _access: 'TRUE'
