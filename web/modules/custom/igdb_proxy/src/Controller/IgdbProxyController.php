@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use GuzzleHttp\ClientInterface;
 use Drupal\Core\State\StateInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Site\Settings;
 
 class IgdbProxyController extends ControllerBase {
 
@@ -62,7 +63,6 @@ fields
   name,
   summary,
   first_release_date,
-  rating,
   cover.url,
   platforms.name,
   genres.name;
@@ -73,7 +73,7 @@ IGDB;
 
       $response = $this->httpClient->post('https://api.igdb.com/v4/games', [
         'headers' => [
-          'Client-ID' => $_ENV['IGDB_CLIENT_ID'],
+          'Client-ID' => Settings::get('igdb_client_id'),
           'Authorization' => "Bearer {$token}",
           'Accept' => 'application/json',
         ],
@@ -140,8 +140,8 @@ IGDB;
 
     $response = $this->httpClient->post('https://id.twitch.tv/oauth2/token', [
       'query' => [
-        'client_id' => $_ENV['IGDB_CLIENT_ID'],
-        'client_secret' => $_ENV['IGDB_CLIENT_SECRET'],
+        'client_id' => Settings::get('igdb_client_id'),
+        'client_secret' => Settings::get('igdb_client_secret'),
         'grant_type' => 'client_credentials',
       ],
       'timeout' => 15,
