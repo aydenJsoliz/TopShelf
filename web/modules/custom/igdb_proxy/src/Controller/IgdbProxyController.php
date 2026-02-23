@@ -44,7 +44,7 @@ class IgdbProxyController extends ControllerBase {
     $token = $this->getTwitchToken();
     $request = $this->requestStack->getCurrentRequest();
 
-    $limit = 500; // IGDB max page size.
+    $limit = 10; // IGDB max page size.
     $offset = max(0, (int) $request->query->get('offset', 0));
     $bulk_all = (bool) $request->query->get('all', false);
 
@@ -65,10 +65,11 @@ fields
   first_release_date,
   cover.url,
   platforms.name,
-  genres.name;
+  genres.name,
+  involved_companies.company.name;
 limit {$limit};
 offset {$offset};
-sort first_release_date desc;
+sort id desc;
 IGDB;
 
       $response = $this->httpClient->post('https://api.igdb.com/v4/games', [
@@ -93,6 +94,17 @@ IGDB;
             $g['cover']['url'] = 'https:' . $g['cover']['url'];
           }
         }
+
+        // Flatten involved companies to a comma-separated string for Feeds mapping.
+        // $company_names = [];
+        // if (!empty($g['involved_companies']) && is_array($g['involved_companies'])) {
+        //   foreach ($g['involved_companies'] as $ic) {
+        //     if (isset($ic['company']['name']) && is_string($ic['company']['name'])) {
+        //       $company_names[] = $ic['company']['name'];
+        //     }
+        //   }
+        // }
+        // $g['involved_companies_csv'] = implode(', ', array_values(array_unique($company_names)));
       }
       unset($g);
 

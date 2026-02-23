@@ -50,6 +50,7 @@
         "drupal/feeds": "^3.2",
         "drupal/feeds_ex": "^1.0@beta",
         "drupal/feeds_fetcher_post": "^2.0",
+        "drupal/feeds_tamper": "^2.0@RC",
         "drupal/field_group": "^3.6 || ^4",
         "drupal/focal_point": "^2.1",
         "drupal/friendly_captcha_challenge": "^0.9",
@@ -100,7 +101,7 @@
     "conflict": {
         "drupal/drupal": "*"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {
