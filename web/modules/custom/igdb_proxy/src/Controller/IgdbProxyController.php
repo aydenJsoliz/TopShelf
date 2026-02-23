@@ -63,6 +63,8 @@ fields
   name,
   summary,
   first_release_date,
+  total_rating,
+  screenshots.url,
   cover.url,
   platforms.name,
   genres.name,
@@ -92,6 +94,7 @@ IGDB;
         if (isset($g['cover']['url']) && is_string($g['cover']['url'])) {
           if (str_starts_with($g['cover']['url'], '//')) {
             $g['cover']['url'] = 'https:' . $g['cover']['url'];
+            $g['cover']['url'] = str_replace('/t_thumb/', '/t_1080p/', $g['cover']['url']);
           }
         }
 
