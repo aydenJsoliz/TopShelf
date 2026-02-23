@@ -5,3 +5,19 @@ igdb_proxy.games:
     _title: 'IGDB Games Feed'
   requirements:
     _access: 'TRUE'
+
+igdb_proxy.genres:
+  path: '/igdb/feed/genres'
+  defaults:
+    _controller: '\Drupal\igdb_proxy\Controller\IgdbProxyController::genres'
+    _title: 'IGDB Genres Feed'
+  requirements:
+    _access: 'TRUE'
+
+igdb_proxy.platforms:
+  path: '/igdb/feed/platforms'
+  defaults:
+    _controller: '\Drupal\igdb_proxy\Controller\IgdbProxyController::platforms'
+    _title: 'IGDB Platforms Feed'
+  requirements:
+    _access: 'TRUE'

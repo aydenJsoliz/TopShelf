@@ -41,6 +41,108 @@ class IgdbProxyController extends ControllerBase {
    *   /igdb/feed/games?all=1
    */
   public function games(): JsonResponse {
+    return $this->buildFeedResponse(
+      'games',
+      <<<FIELDS
+  id,
+  name,
+  summary,
+  first_release_date,
+  total_rating,
+  screenshots.url,
+  cover.url,
+  platforms.name,
+  genres.name,
+  involved_companies.company.name
+FIELDS,
+      function (array &$game): void {
+        // Normalize cover URL if present (IGDB often returns protocol-relative URLs).
+        if (isset($game['cover']['url']) && is_string($game['cover']['url'])) {
+          if (str_starts_with($game['cover']['url'], '//')) {
+            $game['cover']['url'] = 'https:' . $game['cover']['url'];
+            $game['cover']['url'] = str_replace('/t_thumb/', '/t_1080p/', $game['cover']['url']);
+          }
+        }
+
+        // Flatten involved companies to a comma-separated string for Feeds mapping.
+        // $company_names = [];
+        // if (!empty($game['involved_companies']) && is_array($game['involved_companies'])) {
+        //   foreach ($game['involved_companies'] as $ic) {
+        //     if (isset($ic['company']['name']) && is_string($ic['company']['name'])) {
+        //       $company_names[] = $ic['company']['name'];
+        //     }
+        //   }
+        // }
+        // $game['involved_companies_csv'] = implode(', ', array_values(array_unique($company_names)));
+      }
+    );
+  }
+
+  /**
+   * IGDB feed endpoint for Genres.
+   *
+   * Supports paging:
+   *   /igdb/feed/genres?offset=0
+   */
+  public function genres(): JsonResponse {
+    return $this->buildFeedResponse(
+      'genres',
+      <<<FIELDS
+  id,
+  name,
+  slug
+FIELDS
+    );
+  }
+
+  /**
+   * IGDB feed endpoint for Platforms.
+   *
+   * Supports paging:
+   *   /igdb/feed/platforms?offset=0
+   */
+  public function platforms(): JsonResponse {
+    return $this->buildFeedResponse(
+      'platforms',
+      <<<FIELDS
+  id,
+  name,
+  abbreviation,
+  category,
+  generation
+FIELDS
+    );
+  }
+
+  /**
+   * Get or refresh Twitch OAuth token.
+   * NOTE: This simplistic version does not handle expiration; see note below.
+   */
+  protected function getTwitchToken(): string {
+    // If you store expiration too, you can refresh when expired.
+    if ($token = $this->state->get('igdb.token')) {
+      return $token;
+    }
+
+    $response = $this->httpClient->post('https://id.twitch.tv/oauth2/token', [
+      'query' => [
+        'client_id' => Settings::get('igdb_client_id'),
+        'client_secret' => Settings::get('igdb_client_secret'),
+        'grant_type' => 'client_credentials',
+      ],
+      'timeout' => 15,
+    ]);
+
+    $data = json_decode($response->getBody()->getContents(), true);
+    $this->state->set('igdb.token', $data['access_token']);
+
+    return $data['access_token'];
+  }
+
+  /**
+   * Shared IGDB feed handler with paging/bulk support.
+   */
+  protected function buildFeedResponse(string $endpoint, string $fields, ?callable $normalizer = null): JsonResponse {
     $token = $this->getTwitchToken();
     $request = $this->requestStack->getCurrentRequest();
 
@@ -54,27 +156,18 @@ class IgdbProxyController extends ControllerBase {
     $max_pages = max(1, min($max_pages, 200)); // hard cap at 100k items
 
     $items = [];
-
     $page = 0;
+
     do {
       $query = <<<IGDB
 fields
-  id,
-  name,
-  summary,
-  first_release_date,
-  total_rating,
-  screenshots.url,
-  cover.url,
-  platforms.name,
-  genres.name,
-  involved_companies.company.name;
+{$fields};
 limit {$limit};
 offset {$offset};
 sort id desc;
 IGDB;
 
-      $response = $this->httpClient->post('https://api.igdb.com/v4/games', [
+      $response = $this->httpClient->post("https://api.igdb.com/v4/{$endpoint}", [
         'headers' => [
           'Client-ID' => Settings::get('igdb_client_id'),
           'Authorization' => "Bearer {$token}",
@@ -89,27 +182,12 @@ IGDB;
         $batch = [];
       }
 
-      // Normalize cover URL if present (IGDB often returns protocol-relative URLs).
-      foreach ($batch as &$g) {
-        if (isset($g['cover']['url']) && is_string($g['cover']['url'])) {
-          if (str_starts_with($g['cover']['url'], '//')) {
-            $g['cover']['url'] = 'https:' . $g['cover']['url'];
-            $g['cover']['url'] = str_replace('/t_thumb/', '/t_1080p/', $g['cover']['url']);
-          }
+      if ($normalizer) {
+        foreach ($batch as &$item) {
+          $normalizer($item);
         }
-
-        // Flatten involved companies to a comma-separated string for Feeds mapping.
-        // $company_names = [];
-        // if (!empty($g['involved_companies']) && is_array($g['involved_companies'])) {
-        //   foreach ($g['involved_companies'] as $ic) {
-        //     if (isset($ic['company']['name']) && is_string($ic['company']['name'])) {
-        //       $company_names[] = $ic['company']['name'];
-        //     }
-        //   }
-        // }
-        // $g['involved_companies_csv'] = implode(', ', array_values(array_unique($company_names)));
+        unset($item);
       }
-      unset($g);
 
       $items = array_merge($items, $batch);
 
@@ -141,31 +219,6 @@ IGDB;
           : null,
       ],
     ]);
-  }
-
-  /**
-   * Get or refresh Twitch OAuth token.
-   * NOTE: This simplistic version does not handle expiration; see note below.
-   */
-  protected function getTwitchToken(): string {
-    // If you store expiration too, you can refresh when expired.
-    if ($token = $this->state->get('igdb.token')) {
-      return $token;
-    }
-
-    $response = $this->httpClient->post('https://id.twitch.tv/oauth2/token', [
-      'query' => [
-        'client_id' => Settings::get('igdb_client_id'),
-        'client_secret' => Settings::get('igdb_client_secret'),
-        'grant_type' => 'client_credentials',
-      ],
-      'timeout' => 15,
-    ]);
-
-    $data = json_decode($response->getBody()->getContents(), true);
-    $this->state->set('igdb.token', $data['access_token']);
-
-    return $data['access_token'];
   }
 
 }
