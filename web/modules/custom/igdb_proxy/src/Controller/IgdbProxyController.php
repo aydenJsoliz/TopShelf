@@ -49,6 +49,7 @@ class IgdbProxyController extends ControllerBase {
   summary,
   first_release_date,
   total_rating,
+  parent_game,
   screenshots.url,
   cover.url,
   platforms.name,
@@ -60,7 +61,7 @@ FIELDS,
         if (isset($game['cover']['url']) && is_string($game['cover']['url'])) {
           if (str_starts_with($game['cover']['url'], '//')) {
             $game['cover']['url'] = 'https:' . $game['cover']['url'];
-            $game['cover']['url'] = str_replace('/t_thumb/', '/t_1080p/', $game['cover']['url']);
+            $game['cover']['url'] = str_replace('/t_thumb/', '/t_original/', $game['cover']['url']);
           }
         }
 
@@ -88,9 +89,7 @@ FIELDS,
     return $this->buildFeedResponse(
       'genres',
       <<<FIELDS
-  id,
-  name,
-  slug
+  name
 FIELDS
     );
   }
@@ -105,11 +104,7 @@ FIELDS
     return $this->buildFeedResponse(
       'platforms',
       <<<FIELDS
-  id,
-  name,
-  abbreviation,
-  category,
-  generation
+  name
 FIELDS
     );
   }
@@ -146,7 +141,7 @@ FIELDS
     $token = $this->getTwitchToken();
     $request = $this->requestStack->getCurrentRequest();
 
-    $limit = 10; // IGDB max page size.
+    $limit = 50; // IGDB max page size.
     $offset = max(0, (int) $request->query->get('offset', 0));
     $bulk_all = (bool) $request->query->get('all', false);
 
@@ -164,6 +159,7 @@ fields
 {$fields};
 limit {$limit};
 offset {$offset};
+where total_rating > 40;
 sort id desc;
 IGDB;
 

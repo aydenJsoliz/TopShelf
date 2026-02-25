@@ -1,0 +1,15 @@
+name: 'TopShelf Theme'
+type: theme
+'base theme': false
+libraries:
+  - topshelf_theme/global
+logo: logo-dark.svg
+description: 'A customized version of Mercury.'
+core_version_requirement: ^11
+generator: 'mercury:1.0.1'
+regions:
+  content: Content
+  header: Header
+  footer: Footer
+dependencies:
+  - 'cva:cva'
