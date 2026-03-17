@@ -3,6 +3,7 @@ type: theme
 'base theme': false
 libraries:
   - topshelf_theme/global
+  - topshelf_theme/base
 logo: logo-dark.svg
 description: 'A customized version of Mercury.'
 core_version_requirement: ^11
