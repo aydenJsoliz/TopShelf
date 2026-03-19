@@ -2,6 +2,8 @@
 /recipes
 /vendor
 
+/web/sites/default
+
 # macOS
 .DS_Store
 .AppleDouble

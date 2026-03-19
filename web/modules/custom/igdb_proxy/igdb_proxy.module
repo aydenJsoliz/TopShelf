@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * Implements hook_cron().
+ */
+function igdb_proxy_cron(): void {
+  $state = \Drupal::state();
+  $queue = \Drupal::queue('igdb_proxy_games');
+  $last_sync = (int) $state->get('igdb_proxy.games_last_sync', 0);
+  $now = \Drupal::time()->getRequestTime();
+
+  // Run once every 24 hours.
+  if (($now - $last_sync) < 86400) {
+    return;
+  }
+
+  if ($queue->numberOfItems() === 0) {
+    $queue->createItem([
+      'offset' => 0,
+      'limit' => 500,
+    ]);
+  }
+}

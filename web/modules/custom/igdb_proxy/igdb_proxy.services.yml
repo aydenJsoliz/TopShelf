@@ -1,0 +1,13 @@
+services:
+  igdb_proxy.client:
+    class: Drupal\igdb_proxy\Service\IgdbClient
+    arguments: ['@http_client', '@state']
+
+  igdb_proxy.game_normalizer:
+    class: Drupal\igdb_proxy\Service\IgdbGameNormalizer
+
+  igdb_proxy.commands:
+    class: Drupal\igdb_proxy\Commands\IgdbProxyCommands
+    arguments: ['@queue', '@plugin.manager.queue_worker', '@file_system', '@database', '@state', '@datetime.time']
+    tags:
+      - { name: drush.command }

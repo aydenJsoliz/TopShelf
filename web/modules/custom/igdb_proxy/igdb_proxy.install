@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function igdb_proxy_schema(): array {
+  $schema['igdb_game_cache'] = [
+    'description' => 'Cached IGDB game payloads for local feeds.',
+    'fields' => [
+      'igdb_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ],
+      'payload' => [
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'big',
+      ],
+      'updated' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ],
+    ],
+    'primary key' => ['igdb_id'],
+    'indexes' => [
+      'updated' => ['updated'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Create the IGDB cache table for existing installs.
+ */
+function igdb_proxy_update_9001(): void {
+  $schema = \Drupal::database()->schema();
+  if (!$schema->tableExists('igdb_game_cache')) {
+    $tables = igdb_proxy_schema();
+    $schema->createTable('igdb_game_cache', $tables['igdb_game_cache']);
+  }
+}
