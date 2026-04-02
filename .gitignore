@@ -12,6 +12,8 @@
 .Spotlight-V100
 .Trashes
 
+db.sql.gz
+
 # Windows
 Thumbs.db
 ehthumbs.db

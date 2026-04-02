@@ -31,6 +31,8 @@ base:
         weight: 0
       css/base/typography.css:
         weight: 0
+      css/views/backlog-games.css:
+        weight: 0 
   dependencies:
     - core/drupal
     - core/once
