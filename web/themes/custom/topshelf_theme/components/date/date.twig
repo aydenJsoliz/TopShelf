@@ -1,0 +1,9 @@
+{% set date_value = date|default('') %}
+{% set has_date = date_value is not empty ? 'yes' : 'no' %}
+
+{% set datetime_attribute = has_date == 'yes' ? 'datetime="' ~ (date_value|date('c')) ~ '"' : '' %}
+{% set date_display = has_date == 'yes' ? date_value|date('F j, Y') : '' %}
+
+{% if has_date == 'yes' %}
+  <time {{ datetime_attribute }} class="font-sans text-sm text-foreground">{{ date_display }}</time>
+{% endif %}

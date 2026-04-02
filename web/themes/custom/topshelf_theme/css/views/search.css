@@ -1,19 +1,19 @@
 .view-id-search {
-    .view-content {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
-        .views-row {
-            flex: 0 1 calc(20% - 20px);
+  .view-content {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    .views-row {
+      flex: 0 1 calc(20% - 20px);
 
-            @media (max-width: 900px) {
-                flex: 0 1 calc(33% - 20px);
-            }
+      @media (max-width: 900px) {
+        flex: 0 1 calc(33% - 20px);
+      }
 
-            img {
-                width: auto;
-            }
-        }
+      img {
+        width: auto;
+      }
     }
+  }
 }

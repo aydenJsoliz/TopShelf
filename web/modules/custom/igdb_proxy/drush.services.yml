@@ -1,6 +1,6 @@
 services:
   igdb_proxy.commands:
     class: Drupal\igdb_proxy\Commands\IgdbProxyCommands
-    arguments: ['@queue', '@plugin.manager.queue_worker', '@file_system', '@database', '@state', '@datetime.time']
+    arguments: ['@queue', '@plugin.manager.queue_worker', '@file_system', '@database', '@entity_type.manager', '@state', '@datetime.time']
     tags:
       - { name: drush.command }

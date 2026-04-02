@@ -1,0 +1,14 @@
+"$schema": "https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json"
+name: Date
+group: Base
+status: stable
+props:
+  type: object
+  properties:
+    date:
+      type: string
+      title: Date
+      format: date
+      description: "ISO 8601 date (YYYY-MM-DD)."
+      examples:
+        - "2026-03-25"

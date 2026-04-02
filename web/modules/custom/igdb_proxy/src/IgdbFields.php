@@ -10,7 +10,6 @@ class IgdbFields {
   summary,
   first_release_date,
   total_rating,
-  parent_game,
   screenshots.url,
   cover.url,
   platforms.name,
