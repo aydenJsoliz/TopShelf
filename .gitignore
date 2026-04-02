@@ -2,7 +2,7 @@
 /recipes
 /vendor
 
-/web/sites/default
+/web/sites/default/files
 
 # macOS
 .DS_Store
@@ -19,3 +19,5 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+web/sites/default/files/
+web/sites/default/files/
