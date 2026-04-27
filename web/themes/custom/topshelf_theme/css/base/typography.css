@@ -1,5 +1,54 @@
 h1 {
   font-size: 32px;
-  color: red;
+  color: white;
   font-weight: 700;
+}
+
+a {
+  color: white;
+}
+
+li {
+  color: white;
+}
+
+text {
+  color: white;
+}
+
+
+header {
+  background-color: rgb(42, 6, 142);
+}
+
+header a {
+  padding: 8px;
+}
+
+span.field-content {
+  color: white;
+}
+
+body {
+  background-color: rgb(42, 6, 142);
+}
+
+input#edit-search-api-fulltext.form-text {
+    background-color: rgb(25, 2, 88);
+    color: white;
+}
+
+div.branding {
+  img.h-full.w-full {
+    height: 300%;
+    width: 300%;
+
+    position: relative;
+    top: -30px;
+    left: -20px;
+  }
+}
+
+ol {
+  display: none;
 }

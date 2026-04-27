@@ -1,0 +1,15 @@
+body.path-frontpage{
+    section.bg-accent {
+        background-color: transparent;
+    }
+
+    p {
+        color: white;
+        font-size: medium;
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+}
+

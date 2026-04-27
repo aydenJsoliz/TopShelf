@@ -14,7 +14,32 @@
             img {
                 width: auto;
             }
+
+            a {
+                font-size: 18px;
+                padding: 5px;
+                padding-left: 0px;
+            }
         }
     }
+}
+
+h1 {
+    font-size: 50px;
+}
+
+label {
+    color: white;
+}
+
+select {
+    color: white;
+    background-color: rgb(25, 2, 88);
+    padding-right: 10px;
+}
+
+.views-exposed-form {
+    padding-bottom: 15px;
+    padding-top: 10px;
 }
 

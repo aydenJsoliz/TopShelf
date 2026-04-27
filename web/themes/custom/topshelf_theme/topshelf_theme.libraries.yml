@@ -33,6 +33,12 @@ base:
         weight: 0
       css/views/backlog-games.css:
         weight: 0 
+      css/pages/game.css:
+        weight: 0
+      css/pages/front-page.css:
+        weight: 0
+      css/pages/gin-custom.css:
+        weight: 0
   dependencies:
     - core/drupal
     - core/once

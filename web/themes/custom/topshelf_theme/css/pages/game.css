@@ -1,0 +1,23 @@
+body.page-node-type-game {
+    .flag a {
+        padding: 15px 20px;
+        background-color: rgba(160, 237, 127, 0.907);
+        color: black;
+        border-radius: 10px;
+
+    }
+
+}
+
+time {
+    color: white;
+}
+
+div.text-3xl {
+    color: white;
+    font-size: medium;
+}
+
+p.js-flag-message {
+    color: white;
+}

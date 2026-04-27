@@ -2,6 +2,7 @@
 /recipes
 /vendor
 
+/web/sites/default
 /web/sites/default/files
 
 # macOS
@@ -13,6 +14,7 @@
 .Trashes
 
 db.sql.gz
+files.tar.gz
 
 # Windows
 Thumbs.db
