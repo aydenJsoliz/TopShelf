@@ -13,6 +13,10 @@ time {
     color: white;
 }
 
+.flag-logged-game {
+    margin-bottom: 30px;
+}
+
 div.text-3xl {
     color: white;
     font-size: medium;

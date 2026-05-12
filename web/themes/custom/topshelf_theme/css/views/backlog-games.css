@@ -43,3 +43,8 @@ select {
     padding-top: 10px;
 }
 
+input#edit-title.form-text {
+    color: white;
+    background-color: rgb(25, 2, 88);
+}
+
